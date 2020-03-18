@@ -1,12 +1,8 @@
 class Course:
 
-    def __init__(self, name, classroom, teacher, ects, course_taken: bool, grade):
+    def __init__(self, name, classroom, teacher, ects, grade=0):
         self.name = name
         self.classroom = classroom
         self.teacher = teacher
-        self.ects = ects
-
-        if course_taken:
-            self.grade = grade
-        else:
-            self.grade = 0
+        self.ETCs = ects
+        self.grade = grade
