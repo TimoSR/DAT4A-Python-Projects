@@ -12,11 +12,16 @@ class Student:
         self.data_sheet = data_sheet
         self.image_url = image_url
 
+    # 6. In student create a method: get_avg_grade()
+
     def get_avg_grade(self):
 
         average_grade = sum(self.data_sheet.get_grades_as_list()) / len(self.data_sheet.get_grades_as_list())
 
         return average_grade
+
+    # 9. Make a method on Student class that can show progression of the study in % (add up ECTS from all passed
+    # courses divided by total of 150 total points (equivalent to 5 semesters))
 
     def get_progression(self):
         ects = 0
