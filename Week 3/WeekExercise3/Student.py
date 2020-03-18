@@ -11,6 +11,17 @@ class Student:
 
     def get_avg_grade(self):
 
-        total_sum = sum(self.data_sheet.get_grades_as_list()) / len(self.data_sheet.get_grades_as_list())
+        average_grade = sum(self.data_sheet.get_grades_as_list()) / len(self.data_sheet.get_grades_as_list())
 
-        return total_sum
+        return average_grade
+
+    def get_progression(self):
+        etcs = 0
+        for course in self.data_sheet.courses:
+            if course.grade > 0:
+                etcs += course.ETCs
+        return (etcs / 150) * 100
+
+    def get_courses(self):
+        return self.data_sheet.courses
+
