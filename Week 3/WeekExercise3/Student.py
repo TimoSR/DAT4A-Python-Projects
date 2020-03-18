@@ -16,11 +16,11 @@ class Student:
         return average_grade
 
     def get_progression(self):
-        etcs = 0
+        ects = 0
         for course in self.data_sheet.courses:
             if course.grade > 0:
-                etcs += course.ETCs
-        return (etcs / 150) * 100
+                ects += course.ETCs
+        return (ects / 150) * 100
 
     def get_courses(self):
         return self.data_sheet.courses
