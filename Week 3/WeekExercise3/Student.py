@@ -3,6 +3,9 @@ from WeekExercise3 import DataSheet
 
 class Student:
 
+    # 2(a). A student has a data_sheet
+    # 4. In Student create init() so that a Student can be initiated with name, gender, data_sheet and image_url
+
     def __init__(self, name, gender, data_sheet, image_url):
         self.name = name
         self.gender = gender
