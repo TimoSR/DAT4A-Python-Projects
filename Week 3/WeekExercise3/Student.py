@@ -27,7 +27,7 @@ class Student:
         ects = 0
         for course in self.data_sheet.courses:
             if course.grade > 0:
-                ects += course.ects
+                ects += course.ECTS
         return (ects / 150) * 100
 
     def get_courses(self):
