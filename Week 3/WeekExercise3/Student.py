@@ -11,6 +11,7 @@ class Student:
         self.gender = gender
         self.data_sheet = data_sheet
         self.image_url = image_url
+        print("Created student" + {str}, name)
 
     # 6. In student create a method: get_avg_grade()
 
@@ -32,4 +33,3 @@ class Student:
 
     def get_courses(self):
         return self.data_sheet.courses
-
