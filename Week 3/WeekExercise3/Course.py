@@ -6,5 +6,5 @@ class Course:
         self.name = name
         self.classroom = classroom
         self.teacher = teacher
-        self.ECTS = int(ECTS)
+        self.ECTS = ECTS
         self.grade = grade
