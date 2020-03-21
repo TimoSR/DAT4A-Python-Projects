@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.DEBUG, format=log_fmt)
 
 
 def usage():
-    return 'Usage : cli-Ex1.py csv_path --file file_name'
+    return 'Usage : cli-Exercise.py csv_path --file file_name'
 
 
 def run(arguments):
