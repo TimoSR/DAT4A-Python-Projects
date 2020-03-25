@@ -1,9 +1,8 @@
 import wget
-import multiprocessing
-import  os
+import os
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
-#Create a module containing a class with the following methods:
+# Create a module containing a class with the following methods:
 # 1. init(self, url_list)
 # 2. download(url,filename) raises NotFoundException when url returns 404
 # 3. multi_download() uses threads to download multiple urls as text and stores filenames as a property
@@ -13,9 +12,14 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 # 7. avg_vowels(text) - a rough estimate on readability returns average number of vowels in the words of the text
 # 8. hardest_read() returns the filename of the text with the highest vowel score (use all the cpu cores on the computer for this work.
 
+#https://www.geeksforgeeks.org/python-map-function/
+#https://www.geeksforgeeks.org/python-dictionary/
+#https://www.geeksforgeeks.org/zip-in-python/
+
 class NotFoundException(ValueError):
     def __init__(self, *args):
         ValueError.__init__(self, *args)
+
 
 class URLDownloader:
 
@@ -37,10 +41,10 @@ class URLDownloader:
     # 3.
 
     def multi_download(self):
-        self.downloaded_files = self.multi_thread(self.download(), self.url_list)
+        self.downloaded_files = self.multi_thread_list(self.download(), self.url_list)
 
-    def multi_thread(self, method, jobs, workers = os.cpu_count()):
-        with ThreadPoolExecutor(workers) as pool:
+    def multi_thread_list(self, method, jobs):
+        with ThreadPoolExecutor(os.cpu_count()) as pool:
             result = pool.map()
         return list(result)
 
@@ -75,3 +79,14 @@ class URLDownloader:
     # 8.
 
     def hardest_read(self):
+        for filename in self.downloaded_files:
+            with open(filename, 'rb') as file:
+                texts = self.texts.append(file.read().decode())
+        return {filename: vowel_score for filename, vowel_score in sorted(self.multi_thread_dictionary(
+            self.avg_amount_vowels, texts, self.downloaded_files), key=lambda item: item[1], reverse=True)}
+
+
+    def multi_thread_dictionary(self, method, jobs, names, workers=os.cpu_count()):
+        with ProcessPoolExecutor(workers) as pool:
+            result = pool.map(method, jobs)
+        return dict(zip(names, result))
