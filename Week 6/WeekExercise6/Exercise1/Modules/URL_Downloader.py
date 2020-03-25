@@ -1,5 +1,6 @@
 import wget
 import multiprocessing
+import  os
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 #Create a module containing a class with the following methods:
@@ -23,6 +24,7 @@ class URLDownloader:
     def __init__(self, url_list):
         self.url_list = url_list
         self.downloaded_files = []
+        self.texts = []
 
     # 2.
 
@@ -37,7 +39,7 @@ class URLDownloader:
     def multi_download(self):
         self.downloaded_files = self.multi_thread(self.download(), self.url_list)
 
-    def multi_thread(self, method, jobs, workers=4):
+    def multi_thread(self, method, jobs, workers = os.cpu_count()):
         with ThreadPoolExecutor(workers) as pool:
             result = pool.map()
         return list(result)
@@ -45,20 +47,31 @@ class URLDownloader:
     # 4.
 
     def __iter__(self):
+        self.index = 0
         return self
 
     # 5.
 
     def __next__(self):
+        index = self.index
+        self.index += 1
+        if index < len(self.downloaded_files):
+            return self.downloaded_files[index]
+        else:
+            raise StopIteration
 
     # 6.
 
-    def url_list_genrator(self):
+    def url_list_generator(self):
+        for file in self.downloaded_files:
+            # https://www.geeksforgeeks.org/use-yield-keyword-instead-return-keyword-python/
+            yield file
 
     # 7.
 
     def avg_amount_vowels(self, text):
+        return sum([*map(text.lower().count, 'aeiYouæøå')]) / len(text.split())
 
     # 8.
 
-    def hardest_read(self   ):
+    def hardest_read(self):
