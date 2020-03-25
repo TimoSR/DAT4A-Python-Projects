@@ -1,7 +1,6 @@
 import wget
 import multiprocessing
-from concurrent.futures import ThreadPoolExecutor
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 #Create a module containing a class with the following methods:
 # 1. init(self, url_list)
