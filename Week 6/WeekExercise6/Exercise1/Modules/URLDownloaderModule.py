@@ -2,6 +2,7 @@ import wget
 import os
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
+
 # Create a module containing a class with the following methods:
 # 1. init(self, url_list)
 # 2. download(url,filename) raises NotFoundException when url returns 404
@@ -10,11 +11,12 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 # 5. next() returns the next filename (and stops when there are no more)
 # 6. urllist_generator() returns a generator to loop through the urls
 # 7. avg_vowels(text) - a rough estimate on readability returns average number of vowels in the words of the text
-# 8. hardest_read() returns the filename of the text with the highest vowel score (use all the cpu cores on the computer for this work.
+# 8. hardest_read() returns the filename of the text with the highest vowel score (use all the cpu cores on the computer
+# for this work.
 
-#https://www.geeksforgeeks.org/python-map-function/
-#https://www.geeksforgeeks.org/python-dictionary/
-#https://www.geeksforgeeks.org/zip-in-python/
+# https://www.geeksforgeeks.org/python-map-function/
+# https://www.geeksforgeeks.org/python-dictionary/
+# https://www.geeksforgeeks.org/zip-in-python/
 
 class NotFoundException(ValueError):
     def __init__(self, *args):
@@ -32,21 +34,23 @@ class URLDownloader:
 
     # 2.
 
-    def download(self, url, filename):
+    def download(self, url):
         try:
-            return wget.download(url, filename)
+            return wget.download(url)
         except:
             raise NotFoundException('Error: File not found')
 
     # 3.
 
     def multi_download(self):
-        self.downloaded_files = self.multi_thread_list(self.download(), self.url_list)
 
-    def multi_thread_list(self, method, jobs):
-        with ThreadPoolExecutor(os.cpu_count()) as pool:
-            result = pool.map()
-        return list(result)
+        def multi_thread_list(method, jobs):
+            with ThreadPoolExecutor(os.cpu_count()) as pool:
+                result = pool.map(method, jobs)
+            return list(result)
+
+        for url in self.url_list:
+            self.downloaded_files += multi_thread_list(self.download(url), self.url_list)
 
     # 4.
 
@@ -84,7 +88,6 @@ class URLDownloader:
                 texts = self.texts.append(file.read().decode())
         return {filename: vowel_score for filename, vowel_score in sorted(self.multi_thread_dictionary(
             self.avg_amount_vowels, texts, self.downloaded_files), key=lambda item: item[1], reverse=True)}
-
 
     def multi_thread_dictionary(self, method, jobs, names, workers=os.cpu_count()):
         with ProcessPoolExecutor(workers) as pool:
