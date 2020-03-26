@@ -1,6 +1,8 @@
 import wget
 import os
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+import multiprocessing
+from urllib.parse import urlparse
 
 
 # Create a module containing a class with the following methods:
@@ -17,10 +19,11 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 # https://www.geeksforgeeks.org/python-map-function/
 # https://www.geeksforgeeks.org/python-dictionary/
 # https://www.geeksforgeeks.org/zip-in-python/
+# https://www.geeksforgeeks.org/formatted-string-literals-f-strings-python/
 
 class NotFoundException(ValueError):
-    def __init__(self, *args):
-        ValueError.__init__(self, *args)
+    def __init__(self, *args, **kwargs):
+        ValueError.__init__(self, *args, **kwargs)
 
 
 class URLDownloader:
@@ -34,9 +37,25 @@ class URLDownloader:
 
     # 2.
 
-    def download(self, url):
+    # Works
+
+    def download(self, url, name=None):
         try:
-            return wget.download(url)
+            filename = os.path.basename(urlparse(url).path)
+
+            if name:
+                filename = name
+
+            directory = 'Downloaded_Files'
+
+            full_file_path = directory+'/' + filename
+
+            file_exist = os.path.isfile(full_file_path)
+
+            if file_exist:
+                print(f'File: {filename} already exist in: {directory}, aborting download')
+            else:
+                return wget.download(url, out=full_file_path)
         except:
             raise NotFoundException('Error: File not found')
 
@@ -61,19 +80,18 @@ class URLDownloader:
     # 5.
 
     def __next__(self):
-        index = self.index
         self.index += 1
-        if index < len(self.downloaded_files):
-            return self.downloaded_files[index]
+        if self.index < len(self.downloaded_files):
+            return self.downloaded_files[self.index]
         else:
             raise StopIteration
 
     # 6.
 
     def url_list_generator(self):
-        for file in self.downloaded_files:
+        for url in self.downloaded_files:
             # https://www.geeksforgeeks.org/use-yield-keyword-instead-return-keyword-python/
-            yield file
+            yield url
 
     # 7.
 
