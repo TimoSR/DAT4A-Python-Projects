@@ -1,6 +1,8 @@
 import wget
 import os
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+import concurrent.futures
+import concurrent.futures.process
 import multiprocessing
 from urllib.parse import urlparse
 
@@ -48,7 +50,7 @@ class URLDownloader:
 
             directory = 'Downloaded_Files'
 
-            full_file_path = directory+'/' + filename
+            full_file_path = directory + '/' + filename
 
             file_exist = os.path.isfile(full_file_path)
 
@@ -61,15 +63,18 @@ class URLDownloader:
 
     # 3.
 
+    # Works
+
     def multi_download(self):
 
-        def multi_thread_list(method, jobs):
-            with ThreadPoolExecutor(os.cpu_count()) as pool:
-                result = pool.map(method, jobs)
-            return list(result)
-
-        for url in self.url_list:
-            self.downloaded_files += multi_thread_list(self.download(url), self.url_list)
+        with ThreadPoolExecutor(os.cpu_count()) as pool:
+            pool_of_urls = {pool.submit(self.download, url): url for url in self.url_list}
+            for job in concurrent.futures.as_completed(pool_of_urls):
+                url = pool_of_urls[job]
+                try:
+                    job.result()
+                except Exception as e:
+                    print(f'An error occurred: {url, e}')
 
     # 4.
 
