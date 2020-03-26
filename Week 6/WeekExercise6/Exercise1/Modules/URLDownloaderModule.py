@@ -65,6 +65,7 @@ class URLDownloader:
 
     # Works
 
+    # https://docs.python.org/3/library/concurrent.futures.html
     def multi_download(self):
 
         with ThreadPoolExecutor(os.cpu_count()) as pool:
